@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: starry-skies-deployment
+  labels:
+    app: starry-skies
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: starry-skies
+  template:
+    metadata:
+      labels:
+        app: starry-skies
+    spec:
+      containers:
+        - name: starry-skies
+          image: nonbiri/starry-skies:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: starry-skies-service
+spec:
+  selector:
+    app: starry-skies
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer

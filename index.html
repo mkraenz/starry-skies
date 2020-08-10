@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Starry Skies</title>
+    <meta name="description" content="Mobile Game Casual">
+    <meta name="author" content="Mirco Kraenz - Kraenz Software Development">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="game, mobile, casual, sun, stars, sky">
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico" type="image/x-icon">
+    <script src="build/bundle.js"></script>
+    <style>
+        @font-face {
+            font-family: "Metamorphous";
+            src: url('assets/font/Metamorphous-Regular.ttf');
+            font-weight: 400;
+            font-weight: normal;
+        }
+
+        @font-face {
+            font-family: "FellEnglishSC";
+            src: url('assets/font/IMFellEnglishSC-Regular.ttf');
+            font-weight: 400;
+            font-weight: normal;
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden
+        }
+    </style>
+</head>
+
+<body>
+    <!-- "loads" the font so phaser can use it -->
+    <div style="font-family:Metamorphous; position: absolute; left:-1000px; visibility:hidden;">.</div>
+    <div style="font-family:FellEnglishSC; position: absolute; left:-1000px; visibility:hidden;">.</div>
+    <div class="container">
+        <div id="game"></div>
+    </div>
+</body>
+
+</html>
