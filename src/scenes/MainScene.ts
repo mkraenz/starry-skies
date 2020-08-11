@@ -1,19 +1,18 @@
 import { Physics, Scene } from "phaser";
 import { BackgroundImage } from "../components/BackgroundImage";
+import { GravityIncreaser } from "../components/GravityIncreaser";
 import { Player } from "../components/Player";
 import { Star } from "../components/Star";
 import { StarSpawner } from "../components/StarSpawner";
 import { Thermometer } from "../components/Thermometer";
+import { DEV } from "../dev-config";
 import { Event } from "../events/Event";
-import { TextConfig } from "../styles/Text";
+import { GRegistry } from "../gRegistry";
+import { GameOverScene, IGameOverSceneInitData } from "./GameOverScene";
 import { ScoreHud } from "./hud/ScoreHud";
 import { Scenes } from "./Scenes";
 
 const cfg = {
-    gravityIncrease: {
-        interval: 5000, // ms
-        step: 20,
-    },
     spawn: {
         interval: 150, // ms
     },
@@ -26,7 +25,8 @@ export class MainScene extends Scene {
     private stars!: Group;
     private sun!: Player;
     private spawner!: StarSpawner;
-    private intervalTimers: number[] = [];
+    private gravityIncreaser!: GravityIncreaser;
+    private gotoPendingDirtyFlag = false;
 
     constructor() {
         super({ key: Scenes.Main });
@@ -43,7 +43,7 @@ export class MainScene extends Scene {
 
         this.sun = new Player(this);
         this.createStars();
-        this.speedUpGravityOverTime();
+        this.gravityIncreaser = new GravityIncreaser(this);
 
         this.setUpTemperatureHandlers();
     }
@@ -52,36 +52,23 @@ export class MainScene extends Scene {
         this.updateStars();
     }
 
-    private setUpTemperatureHandlers() {
-        // todo
-        const width = this.scale.width;
-        const height = this.scale.height;
-
-        this.events
-            .on(Event.ExplodinglyHot, () => {
-                this.add.text(
-                    width / 2,
-                    height / 2,
-                    "TOO HOT. Game Over",
-                    TextConfig.xl
-                );
-            })
-            .on(Event.Freezing, () => {
-                this.add.text(
-                    width / 2,
-                    height / 2,
-                    "TOO COLD. Game Over",
-                    TextConfig.xl
-                );
-            });
+    private addHud() {
+        this.addSubScene(Scenes.Score, ScoreHud);
     }
 
-    private speedUpGravityOverTime() {
-        const speedUpTimer = window.setInterval(() => {
-            const gravity = this.physics.world.gravity;
-            gravity.set(gravity.x, gravity.y + cfg.gravityIncrease.step);
-        }, cfg.gravityIncrease.interval);
-        this.intervalTimers.push(speedUpTimer);
+    private setUpTemperatureHandlers() {
+        if (!DEV.loseDisabled) {
+            this.events
+                .on(Event.ExplodinglyHot, () => this.gameOver())
+                .on(Event.Freezing, () => this.gameOver());
+        }
+    }
+
+    private gameOver() {
+        const data: IGameOverSceneInitData = {
+            score: GRegistry.getScore(this),
+        };
+        this.goto(Scenes.GameOver, GameOverScene, data);
     }
 
     private createStars() {
@@ -107,22 +94,10 @@ export class MainScene extends Scene {
 
     private restart() {
         this.cameras.main.once("camerafadeoutcomplete", () => {
-            this.spawner.destroy();
-            this.intervalTimers.forEach(interval => clearInterval(interval));
-            this.children.getAll().forEach(c => c.destroy());
-            this.subScenes.forEach(key => {
-                this.scene.remove(key);
-            });
-            this.subScenes = [];
-            // prevent "cannot read property 'cut' of null" on scene.events.emit(Event.Type)
-            Object.values(Event).forEach(event => this.events.off(event));
+            this.tearDown();
             this.scene.restart();
         });
         this.cameras.main.fadeOut(100);
-    }
-
-    private addHud() {
-        this.addSubScene(Scenes.Score, ScoreHud);
     }
 
     private addSubScene<T extends {}>(
@@ -132,5 +107,36 @@ export class MainScene extends Scene {
     ) {
         this.scene.add(key, scene, true, initData);
         this.subScenes.push(key);
+    }
+
+    private goto(
+        key: string,
+        sceneClass: new (name: string) => Scene,
+        data?: { [key: string]: any }
+    ) {
+        // consider removing the fadeOut
+        if (this.gotoPendingDirtyFlag) {
+            // do not trigger scene change twice
+            return;
+        }
+        this.cameras.main.once("camerafadeoutcomplete", () => {
+            this.tearDown();
+            this.scene.add(key, sceneClass, true, data);
+            this.scene.remove(this);
+        });
+        this.gotoPendingDirtyFlag = true;
+        this.cameras.main.fadeOut(50);
+    }
+
+    private tearDown() {
+        this.spawner.destroy();
+        this.gravityIncreaser.destroy();
+        this.children.getAll().forEach(c => c.destroy());
+        this.subScenes.forEach(key => {
+            this.scene.remove(key);
+        });
+        this.subScenes = [];
+        // prevent "cannot read property 'cut' of null" on scene.events.emit(Event.Type)
+        Object.values(Event).forEach(event => this.events.off(event));
     }
 }

@@ -9,6 +9,7 @@ export enum Color {
     HackerGreen = "#00ff00",
     LawnGreen = "#7CFC00",
     Yellow = "#FFFF00",
+    Orange = "#EC6C28",
 }
 
 const to0x = (color: Color | string) => color.replace("#", "0x");

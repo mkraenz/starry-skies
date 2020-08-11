@@ -1,8 +1,10 @@
 import { GameObjects, Scene } from "phaser";
 import { DEV } from "../dev-config";
+import { GRegistry } from "../gRegistry";
 import { locals } from "../localizations";
 import { Color, toHex } from "../styles/Color";
 import { setDefaultTextStyle, TextConfig } from "../styles/Text";
+import { GameOverScene } from "./GameOverScene";
 import { MainScene } from "./MainScene";
 import { Scenes } from "./Scenes";
 import { TitleScene } from "./TitleScene";
@@ -28,6 +30,8 @@ export class LoadingScene extends Scene {
         const img = (filename: string) => `./assets/images/${filename}`;
         this.load
             .image("button-sm", img("button-sm.png"))
+            .image("ui-field", img("ui-field.png"))
+            .image("ui-window", img("ui-window.png"))
             .image("bg", img("space_rt.png"))
             .image("star", img("star.png"))
             .image("thermometer", img("thermometer.png"))
@@ -70,8 +74,9 @@ export class LoadingScene extends Scene {
         this.load.on("progress", this.getProgressBarFiller(progressBar));
         this.load.on("fileprogress", this.getAssetTextWriter(assetText));
         this.load.on("complete", () => {
-            if (DEV.startInWinScene) {
-                //
+            if (DEV.startInGameOverScene) {
+                GRegistry.setScore(this, 13650);
+                this.scene.add(Scenes.GameOver, GameOverScene, true);
             } else if (DEV.skipTitle) {
                 this.scene.add(Scenes.Main, MainScene, true);
             } else {

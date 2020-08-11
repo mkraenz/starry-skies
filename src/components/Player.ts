@@ -32,6 +32,11 @@ export class Player extends Physics.Arcade.Sprite {
         this.addControls();
     }
 
+    public destroy() {
+        this.scene.input.removeAllListeners();
+        super.destroy();
+    }
+
     private addControls() {
         this.scene.input
             .on("pointerdown", (pointer: Pointer) => this.moveTo(pointer))

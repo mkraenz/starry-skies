@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { Event } from "../../events/Event";
 import { IStarCollectedEvent } from "../../events/interfaces";
 import { StarColor } from "../../events/StarColor";
+import { GRegistry } from "../../gRegistry";
 import { locals } from "../../localizations";
 import { TextConfig } from "../../styles/Text";
 import { Scenes } from "../Scenes";
@@ -18,7 +19,7 @@ const colorsToPoints: { [key in StarColor]: number } = {
 
 export class ScoreHud extends Scene {
     private score = 0;
-    private idealTempOnPreviousCollect = true; // fixes one-off issue when switching from ideal to non-ideal
+    private idealTempOnPreviousCollect = false; // fixes one-off issue when switching from ideal to non-ideal
     private bonus = false;
 
     constructor(key = Scenes.Score) {
@@ -42,6 +43,7 @@ export class ScoreHud extends Scene {
                         ? cfg.bonusMultiplier
                         : 1;
                 this.score += colorsToPoints[data.color] * bonusMultiplier;
+                GRegistry.setScore(this, this.score); // for use by other scenes
                 scoreText.setText(this.getScoreText());
                 if (this.bonus === false) {
                     this.idealTempOnPreviousCollect = false;

@@ -9,6 +9,11 @@ export const TextConfig: { [key: string]: Style } = {
         fontSize: "10rem",
         color: Color.WhiteSilver,
     },
+    gameOverTitle: {
+        fontFamily: "Baloo",
+        fontSize: "10rem",
+        color: Color.Orange,
+    },
     buttonSm: {
         fontFamily: "Baloo",
         fontSize: "7rem",

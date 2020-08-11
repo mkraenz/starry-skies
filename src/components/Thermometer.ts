@@ -1,5 +1,6 @@
 import { inRange } from "lodash";
 import { GameObjects, Scene } from "phaser";
+import { DEV } from "../dev-config";
 import { Event } from "../events/Event";
 import { IStarCollectedEvent } from "../events/interfaces";
 import { StarColor } from "../events/StarColor";
@@ -100,6 +101,10 @@ export class Thermometer extends GameObjects.Sprite {
     }
 
     private getCurrentEvent() {
+        if (DEV.instantKill) {
+            return Event.ExplodinglyHot;
+        }
+
         const isFreezing = this.temperature < cfg.temperature.min;
         const isIdeal = inRange(
             this.temperature,
