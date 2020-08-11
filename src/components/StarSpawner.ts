@@ -18,7 +18,7 @@ export class StarSpawner {
     constructor(
         private scene: Scene,
         private group: Group,
-        private maxConcurrent: number = 50
+        private maxConcurrent: number = 200
     ) {}
 
     public spawn(n: number) {

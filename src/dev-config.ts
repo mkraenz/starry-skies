@@ -4,7 +4,7 @@ export const DEV = isProd
     : {
           initialLevel: 1,
           startInWinScene: false,
-          skipTitle: true,
+          skipTitle: false,
           showPaths: false,
           loseDisabled: false,
           winDisabled: false,

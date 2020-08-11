@@ -9,6 +9,16 @@ import { TextConfig } from "../styles/Text";
 import { ScoreHud } from "./hud/ScoreHud";
 import { Scenes } from "./Scenes";
 
+const cfg = {
+    gravityIncrease: {
+        interval: 5000, // ms
+        step: 20,
+    },
+    spawn: {
+        interval: 150, // ms
+    },
+};
+
 type Group = Physics.Arcade.Group;
 
 export class MainScene extends Scene {
@@ -69,8 +79,8 @@ export class MainScene extends Scene {
     private speedUpGravityOverTime() {
         const speedUpTimer = window.setInterval(() => {
             const gravity = this.physics.world.gravity;
-            gravity.set(gravity.x, gravity.y + 10);
-        }, 10000);
+            gravity.set(gravity.x, gravity.y + cfg.gravityIncrease.step);
+        }, cfg.gravityIncrease.interval);
         this.intervalTimers.push(speedUpTimer);
     }
 
@@ -80,7 +90,7 @@ export class MainScene extends Scene {
             enable: true,
         });
         this.spawner = new StarSpawner(this, stars);
-        this.spawner.spawnInterval(1, 300);
+        this.spawner.spawnInterval(1, 150);
         this.physics.add.overlap(this.sun, stars, (_, starX) => {
             (starX as Star).onCollide();
             stars.remove(starX, true, true);

@@ -5,6 +5,7 @@ import { Color, toHex } from "../styles/Color";
 import { setDefaultTextStyle, TextConfig } from "../styles/Text";
 import { MainScene } from "./MainScene";
 import { Scenes } from "./Scenes";
+import { TitleScene } from "./TitleScene";
 
 export class LoadingScene extends Scene {
     private halfWidth!: number;
@@ -26,6 +27,7 @@ export class LoadingScene extends Scene {
     private preloadAssets() {
         const img = (filename: string) => `./assets/images/${filename}`;
         this.load
+            .image("button-sm", img("button-sm.png"))
             .image("bg", img("space_rt.png"))
             .image("star", img("star.png"))
             .image("thermometer", img("thermometer.png"))
@@ -38,7 +40,7 @@ export class LoadingScene extends Scene {
             y: this.halfHeight - 50,
             text: locals.loading,
             style: {
-                font: "30px Metamorphous",
+                font: "30px Baloo",
                 fill: Color.White,
             },
         });
@@ -59,7 +61,7 @@ export class LoadingScene extends Scene {
             y: this.halfHeight + 65,
             text: "",
             style: {
-                font: "18px Metamorphous",
+                font: "18px Baloo",
                 fill: Color.White,
             },
         });
@@ -73,7 +75,7 @@ export class LoadingScene extends Scene {
             } else if (DEV.skipTitle) {
                 this.scene.add(Scenes.Main, MainScene, true);
             } else {
-                //
+                this.scene.add(Scenes.Title, TitleScene, true);
             }
             this.scene.remove(this);
         });

@@ -49,6 +49,10 @@ export class Star extends Physics.Arcade.Sprite {
         }
     }
 
+    public disablePhysics() {
+        (this.body as Physics.Arcade.Body).allowGravity = false;
+    }
+
     private colorize() {
         switch (this.color) {
             case StarColor.Green:

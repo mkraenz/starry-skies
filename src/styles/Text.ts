@@ -5,37 +5,39 @@ type Style = Partial<GameObjects.TextStyle>;
 
 export const TextConfig: { [key: string]: Style } = {
     title: {
-        fontFamily: "FellEnglishSC",
-        fontSize: "118px",
+        fontFamily: "Baloo",
+        fontSize: "10rem",
         color: Color.WhiteSilver,
     },
-    banner: {
-        fontFamily: "Metamorphous",
-        fontSize: "28px",
+    buttonSm: {
+        fontFamily: "Baloo",
+        fontSize: "7rem",
         color: Color.WhiteSilver,
     },
     version: {
-        fontFamily: "Metamorphous",
+        fontFamily: "Baloo",
         color: Color.WhiteSilver,
+        fontSize: "2rem",
     },
     xl: {
+        fontFamily: "Baloo",
         fontSize: "118px",
-        color: Color.White,
+        color: Color.WhiteSilver,
     },
     lg: {
-        fontFamily: "Metamorphous",
+        fontFamily: "Baloo",
         fontSize: "20px",
-        color: Color.White,
+        color: Color.WhiteSilver,
     },
     md: {
-        fontFamily: "Metamorphous",
+        fontFamily: "Baloo",
         fontSize: "16px",
-        color: Color.White,
+        color: Color.WhiteSilver,
     },
     sm: {
-        fontFamily: "Metamorphous",
+        fontFamily: "Baloo",
         fontSize: "12px",
-        color: Color.White,
+        color: Color.WhiteSilver,
     },
     debug: {
         fontFamily: "Courier",

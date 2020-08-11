@@ -79,7 +79,9 @@ Every branch is automatically deployed to [starry-skies-game.herokuapp.com](http
 
 See [.travis.yml](.travis.yml).
 
-## External Phaser Resources
+## Resources
+
+### Phaser
 
 - [Phaser 3 Framework](https://github.com/photonstorm/phaser)
 - [Phaser 3 Docs with TypeScript Definition File](https://github.com/photonstorm/phaser3-docs)
@@ -91,7 +93,7 @@ See [.travis.yml](.travis.yml).
 - [Template Project - Phaser3 with TypeScript](https://github.com/digitsensitive/phaser3-typescript)
 - [RexRainbow Github Phaser 3 plugins and more](https://github.com/rexrainbow/phaser3-rex-notes/tree/master/plugins)
 
-## Helpful tools and Resources
+### Helpful tools
 
 - [Pixel Art Maker](http://pixelartmaker.com/)
 - [Leshy SpriteSheet Tool](https://www.leshylabs.com/apps/sstool)
@@ -109,3 +111,7 @@ See [.travis.yml](.travis.yml).
 - [Phaser3 Particle Editor](https://koreezgames.github.io/phaser3-particle-editor/)
 - [jessholland Maps](https://jessholland.artstation.com/projects/ovArq)
 - [Phaser3 Path Builder Plugin](https://github.com/samid737/phaser3-plugin-pathbuilder) (not working with newest Phaser3 version)
+
+### Assets and UI
+
+- [UIHere.com](https://www.uihere.com/free-cliparts/user-interface-design-game-game-ui-buttons-gold-coins-online-1035811)

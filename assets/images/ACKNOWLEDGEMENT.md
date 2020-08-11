@@ -5,6 +5,7 @@
 - <https://opengameart.org/content/space-skybox-1>
 - <https://opengameart.org/content/shiny-sun>
 - <https://opengameart.org/content/star>
+- [Menu UI](https://cga-creative-game-assets.itch.io/gold-2d-mobile-ui-for-casual-game)
 
 ### Generating favicon.ico
 
