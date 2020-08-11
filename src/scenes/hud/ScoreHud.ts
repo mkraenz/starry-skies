@@ -18,6 +18,7 @@ const colorsToPoints: { [key in StarColor]: number } = {
 
 export class ScoreHud extends Scene {
     private score = 0;
+    private idealTempOnPreviousCollect = true; // fixes one-off issue when switching from ideal to non-ideal
     private bonus = false;
 
     constructor(key = Scenes.Score) {
@@ -36,11 +37,20 @@ export class ScoreHud extends Scene {
         const mainScene = this.scene.get(Scenes.Main);
         mainScene.events
             .on(Event.StarCollected, (data: IStarCollectedEvent) => {
-                const bonusMultiplier = this.bonus ? cfg.bonusMultiplier : 1; // todo this is one-off
+                const bonusMultiplier =
+                    this.bonus || this.idealTempOnPreviousCollect
+                        ? cfg.bonusMultiplier
+                        : 1;
                 this.score += colorsToPoints[data.color] * bonusMultiplier;
                 scoreText.setText(this.getScoreText());
+                if (this.bonus === false) {
+                    this.idealTempOnPreviousCollect = false;
+                }
             })
-            .on(Event.InIdealTemperature, () => (this.bonus = true))
+            .on(Event.InIdealTemperature, () => {
+                this.idealTempOnPreviousCollect = true;
+                this.bonus = true;
+            })
             .on(Event.OutsideIdealTemperature, () => (this.bonus = false));
     }
 

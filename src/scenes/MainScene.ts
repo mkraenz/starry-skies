@@ -25,12 +25,14 @@ export class MainScene extends Scene {
     public create(): void {
         this.cameras.main.fadeIn(200);
         new BackgroundImage(this, "bg");
-        this.cameras.main.once("camerafadeincomplete", () => this.addHud());
+        this.cameras.main.once("camerafadeincomplete", () => {
+            new Thermometer(this);
+            this.addHud();
+        });
         this.input.keyboard.on("keydown-R", () => this.restart());
 
         this.sun = new Player(this);
         this.createStars();
-        new Thermometer(this);
         this.speedUpGravityOverTime();
 
         this.setUpTemperatureHandlers();
@@ -41,6 +43,7 @@ export class MainScene extends Scene {
     }
 
     private setUpTemperatureHandlers() {
+        // todo
         const width = this.scale.width;
         const height = this.scale.height;
 
