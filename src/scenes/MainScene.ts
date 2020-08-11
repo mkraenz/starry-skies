@@ -3,7 +3,9 @@ import { BackgroundImage } from "../components/BackgroundImage";
 import { Player } from "../components/Player";
 import { Star } from "../components/Star";
 import { StarSpawner } from "../components/StarSpawner";
+import { Thermometer } from "../components/Thermometer";
 import { Event } from "../events/Event";
+import { TextConfig } from "../styles/Text";
 import { ScoreHud } from "./hud/ScoreHud";
 import { Scenes } from "./Scenes";
 
@@ -28,11 +30,37 @@ export class MainScene extends Scene {
 
         this.sun = new Player(this);
         this.createStars();
+        new Thermometer(this);
         this.speedUpGravityOverTime();
+
+        this.setUpTemperatureHandlers();
     }
 
     public update() {
         this.updateStars();
+    }
+
+    private setUpTemperatureHandlers() {
+        const width = this.scale.width;
+        const height = this.scale.height;
+
+        this.events
+            .on(Event.ExplodinglyHot, () => {
+                this.add.text(
+                    width / 2,
+                    height / 2,
+                    "TOO HOT. Game Over",
+                    TextConfig.xl
+                );
+            })
+            .on(Event.Freezing, () => {
+                this.add.text(
+                    width / 2,
+                    height / 2,
+                    "TOO COLD. Game Over",
+                    TextConfig.xl
+                );
+            });
     }
 
     private speedUpGravityOverTime() {

@@ -7,6 +7,10 @@ const GLOBAL_MAX_CONCURRENT_ENTITIES_OF_TYPE = 150;
 
 type Group = Physics.Arcade.Group;
 
+const cfg = {
+    minXScale: 3 / 12,
+};
+
 export class StarSpawner {
     private spawned: Star[] = [];
     private spawnTimers: number[] = [];
@@ -45,7 +49,8 @@ export class StarSpawner {
     }
 
     private spawnOne() {
-        const x = random(this.scene.scale.width);
+        const width = this.scene.scale.width;
+        const x = random(Math.ceil(width * cfg.minXScale), width);
         const colors = Object.values(StarColor);
         const randomColor = colors[random(colors.length - 1)];
         return new Star(this.scene, x, -100, randomColor);

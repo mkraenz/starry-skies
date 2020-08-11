@@ -28,6 +28,7 @@ export class LoadingScene extends Scene {
         this.load
             .image("bg", img("space_rt.png"))
             .image("star", img("star.png"))
+            .image("thermometer", img("thermometer.png"))
             .image("sun", img("sun_shiny.png"));
     }
 
