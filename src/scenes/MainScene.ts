@@ -12,17 +12,9 @@ import { GameOverScene, IGameOverSceneInitData } from "./GameOverScene";
 import { ScoreHud } from "./hud/ScoreHud";
 import { Scenes } from "./Scenes";
 
-const cfg = {
-    spawn: {
-        interval: 150, // ms
-    },
-};
-
-type Group = Physics.Arcade.Group;
-
 export class MainScene extends Scene {
     private subScenes: string[] = [];
-    private stars!: Group;
+    private stars!: Physics.Arcade.Group;
     private sun!: Player;
     private spawner!: StarSpawner;
     private gravityIncreaser!: GravityIncreaser;
@@ -50,6 +42,7 @@ export class MainScene extends Scene {
 
     public update() {
         this.updateStars();
+        this.sun.update();
     }
 
     private addHud() {
@@ -131,6 +124,7 @@ export class MainScene extends Scene {
     private tearDown() {
         this.spawner.destroy();
         this.gravityIncreaser.destroy();
+        this.input.removeAllListeners();
         this.children.getAll().forEach(c => c.destroy());
         this.subScenes.forEach(key => {
             this.scene.remove(key);

@@ -6,4 +6,5 @@ export const DEV = isProd
           skipTitle: false,
           loseDisabled: false,
           instantKill: false,
+          disableParticles: true,
       };
