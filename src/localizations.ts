@@ -6,7 +6,7 @@ export const locals = {
     loadingAsset: "Loading asset: ",
     score: "Score: ",
     finalScore: "Your Score",
-    copyright: "Copyright © Mirco Kraenz, Kraenz Software Development 2020",
+    copyright: "Copyright © Mirco Kraenz - Kraenz Software Development 2020",
     version,
     play: "Play",
     retry: "Retry",

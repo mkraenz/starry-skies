@@ -5,16 +5,19 @@ import { Event } from "../events/Event";
 import { IStarCollectedEvent } from "../events/interfaces";
 import { StarColor } from "../events/StarColor";
 import { Color, toHex } from "../styles/Color";
+import { ThermometerColorController } from "./ThermometerColorController";
+import { ThermometerSoundController } from "./ThermometerSoundController";
 
 const cfg = {
     x: 1 / 12,
     y: 1 / 2,
     temperature: {
         min: 0,
+        freezing: 15, // below this, warn about to die from frost
         max: 100, // temperature is in percent
-        init: 10,
-        idealMin: 80,
-        idealMax: 90,
+        init: 20,
+        idealMin: 22,
+        idealMax: 28, // // above this, warn about to die from heat
     },
     scale: 3,
     fluid: {
@@ -66,12 +69,15 @@ export class Thermometer extends GameObjects.Sprite {
                 this.getBottomCenter().y * (1 - cfg.fluid.offsetY),
                 this.width * this.scaleX * cfg.fluid.scaleX,
                 this.getFluidHeight(),
-                toHex(Color.HackerGreen)
+                toHex(Color.Blue)
             )
+            .setAlpha(1)
             .setOrigin(0.5, 0);
         innerBackground.setDepth(10);
         this.fluid.setDepth(11);
         this.setDepth(12);
+        new ThermometerColorController(this.scene, this.fluid);
+        new ThermometerSoundController(this.scene);
     }
 
     private onStarCollected(event: IStarCollectedEvent) {
@@ -97,31 +103,48 @@ export class Thermometer extends GameObjects.Sprite {
     }
 
     private emitTemperatureEvents() {
-        this.scene.events.emit(this.getCurrentEvent());
+        const event = this.currentState();
+        this.scene.events.emit(event);
     }
 
-    private getCurrentEvent() {
+    private currentState() {
         if (DEV.instantKill) {
-            return Event.ExplodinglyHot;
+            return Event.TooHot;
         }
 
-        const isFreezing = this.temperature < cfg.temperature.min;
-        const isIdeal = inRange(
+        const isFrozen = this.temperature < cfg.temperature.min;
+        const isFreezing = inRange(
+            this.temperature,
+            cfg.temperature.min,
+            cfg.temperature.freezing + 1 // in range excludes end
+        );
+        const isHot = inRange(
             this.temperature,
             cfg.temperature.idealMin,
             cfg.temperature.idealMax + 1 // in range excludes end
         );
+        const isTooHot = inRange(
+            this.temperature,
+            cfg.temperature.idealMax,
+            cfg.temperature.max + 1 // in range excludes end
+        );
         const isExplodinglyHot = this.temperature > cfg.temperature.max;
 
+        if (isFrozen) {
+            return Event.Frozen;
+        }
         if (isFreezing) {
             return Event.Freezing;
+        }
+        if (isHot) {
+            return Event.Hot;
+        }
+        if (isTooHot) {
+            return Event.TooHot;
         }
         if (isExplodinglyHot) {
             return Event.ExplodinglyHot;
         }
-        if (isIdeal) {
-            return Event.InIdealTemperature;
-        }
-        return Event.OutsideIdealTemperature;
+        return Event.Cold; // between freezing and idealMin
     }
 }

@@ -53,11 +53,12 @@ export class MainScene extends Scene {
         if (!DEV.loseDisabled) {
             this.events
                 .on(Event.ExplodinglyHot, () => this.gameOver())
-                .on(Event.Freezing, () => this.gameOver());
+                .on(Event.Frozen, () => this.gameOver());
         }
     }
 
     private gameOver() {
+        this.sound.stopAll();
         const data: IGameOverSceneInitData = {
             score: GRegistry.getScore(this),
         };

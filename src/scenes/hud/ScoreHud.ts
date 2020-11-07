@@ -49,11 +49,12 @@ export class ScoreHud extends Scene {
                     this.idealTempOnPreviousCollect = false;
                 }
             })
-            .on(Event.InIdealTemperature, () => {
+            .on(Event.Hot, () => {
                 this.idealTempOnPreviousCollect = true;
                 this.bonus = true;
             })
-            .on(Event.OutsideIdealTemperature, () => (this.bonus = false));
+            .on(Event.TooHot, () => (this.bonus = false))
+            .on(Event.Cold, () => (this.bonus = false));
     }
 
     private getScoreText() {

@@ -28,6 +28,7 @@ export class LoadingScene extends Scene {
 
     private preloadAssets() {
         const img = (filename: string) => `./assets/images/${filename}`;
+        const sound = (filename: string) => `./assets/sounds/${filename}`;
         this.load
             .image("button-sm", img("button-sm.png"))
             .image("ui-field", img("ui-field.png"))
@@ -35,7 +36,11 @@ export class LoadingScene extends Scene {
             .image("bg", img("space_rt.png"))
             .image("star", img("star.png"))
             .image("thermometer", img("thermometer.png"))
-            .image("sun", img("sun_shiny.png"));
+            .image("sun", img("sun_shiny.png"))
+            .audio("hot", sound("rise01.mp3"))
+            .audio("too-hot", sound("rise02.mp3"))
+            .audio("boiling", sound("boiling.mp3"))
+            .audio("coin", sound("sfx_coin_double1.wav"));
     }
 
     private makeLoadingBar() {

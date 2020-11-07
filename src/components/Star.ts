@@ -47,6 +47,7 @@ export class Star extends Physics.Arcade.Sprite {
     public onCollide() {
         const eventData: IStarCollectedEvent = { color: this.color };
         this.scene.events.emit(Event.StarCollected, eventData);
+        this.scene.sound.play("coin");
     }
 
     public update() {
